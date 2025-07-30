@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Disaster Alert System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .param-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .param-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .param-section h4 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .form-select, .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .form-select:focus, .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .disaster-icon {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        
+        .form-check-label {
+            font-weight: 500;
+        }
+        
+        .title-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+        
+        .title-section h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .title-section p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        
+        .input-group-text {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+        }
+        
+        .input-group .form-control {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .parameter-description {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <div class="main-container p-4">
+            <div class="title-section">
+                <h1><i class="fas fa-shield-alt"></i> Disaster Alert System</h1>
+                <p>Advanced Early Warning System for Natural Disasters</p>
+            </div>
+            
+            <form action="/predict" method="post" class="p-4">
+                <!-- Disaster Type Selection -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-exclamation-triangle disaster-icon"></i>
+                        Disaster Type
+                    </label>
+                    <select class="form-select" name="disaster" id="disaster-type">
+                        <option value="flood">🌊 Flood</option>
+                        <option value="heatwave">🌡️ Heat Wave</option>
+                        <option value="earthquake">🌍 Earthquake</option>
+                    </select>
+                </div>
+                
+                <!-- Flood Parameters -->
+                <div id="flood-params" class="param-section">
+                    <h4>
+                        <i class="fas fa-water disaster-icon" style="color: #0d6efd;"></i>
+                        Flood Parameters
+                    </h4>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Rainfall (mm)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-cloud-rain"></i></span>
+                                <input type="number" class="form-control" name="rainfall" step="0.1" value="100.0" required>
+                            </div>
+                            <div class="parameter-description">Recent rainfall amount in millimeters</div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">River Level (m)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-ruler-vertical"></i></span>
+                                <input type="number" class="form-control" name="river_level" step="0.1" value="5.0" required>
+                            </div>
+                            <div class="parameter-description">Current river water level in meters</div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Soil Moisture (%)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-tint"></i></span>
+                                <input type="number" class="form-control" name="soil_moisture" step="0.1" value="50.0" required>
+                            </div>
+                            <div class="parameter-description">Soil moisture content percentage</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Heat Wave Parameters -->
+                <div id="heat-params" class="param-section hidden">
+                    <h4>
+                        <i class="fas fa-thermometer-full disaster-icon" style="color: #dc3545;"></i>
+                        Heat Wave Parameters
+                    </h4>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Max Temperature (°C)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-temperature-high"></i></span>
+                                <input type="number" class="form-control" name="max_temp" step="0.1" value="35.0" required>
+                            </div>
+                            <div class="parameter-description">Maximum expected temperature in Celsius</div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Humidity (%)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-eye-dropper"></i></span>
+                                <input type="number" class="form-control" name="humidity" step="0.1" value="50.0" required>
+                            </div>
+                            <div class="parameter-description">Relative humidity percentage</div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Consecutive Hot Days</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                <input type="number" class="form-control" name="hot_days" min="0" value="3" required>
+                            </div>
+                            <div class="parameter-description">Number of consecutive hot days</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Earthquake Parameters -->
+                <div id="earthquake-params" class="param-section hidden">
+                    <h4>
+                        <i class="fas fa-mountain disaster-icon" style="color: #6f42c1;"></i>
+                        Earthquake Parameters
+                    </h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Seismic Activity Level</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-wave-square"></i></span>
+                                <input type="number" class="form-control" name="seismic_activity" step="0.01" value="2.5" min="0" max="10" required>
+                            </div>
+                            <div class="parameter-description">Current seismic activity reading (0-10 scale)</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ground Displacement (mm)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-arrows-alt-v"></i></span>
+                                <input type="number" class="form-control" name="ground_displacement" step="0.01" value="0.5" min="0" required>
+                            </div>
+                            <div class="parameter-description">Recent ground movement in millimeters</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Distance to Nearest Fault (km)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                <input type="number" class="form-control" name="fault_distance" step="0.1" value="10.0" min="0" required>
+                            </div>
+                            <div class="parameter-description">Distance to nearest active fault line</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Previous Earthquakes (30 days)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-history"></i></span>
+                                <input type="number" class="form-control" name="previous_earthquakes" min="0" value="2" required>
+                            </div>
+                            <div class="parameter-description">Number of earthquakes in the last 30 days</div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Note:</strong> Earthquake prediction is based on seismic patterns and geological data. Higher seismic activity and closer fault distances indicate increased risk.
+                    </div>
+                </div>
+                
+                <!-- City Selection -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-map-pin disaster-icon"></i>
+                        Location
+                    </label>
+                    <select class="form-select" name="city">
+                        {% for city in cities %}
+                        <option value="{{ city }}">{{ city }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- PDF Option -->
+                <div class="mb-4">
+                    <div class="form-check form-switch">
+                        <input type="checkbox" class="form-check-input" name="pdf" id="pdf-checkbox" checked>
+                        <label class="form-check-label" for="pdf-checkbox">
+                            <i class="fas fa-file-pdf"></i>
+                            Generate PDF Alert Report
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-search"></i>
+                        Generate Alert Analysis
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle between disaster type parameters
+        function toggleParams() {
+            const disasterType = document.getElementById('disaster-type').value;
+            const floodParams = document.getElementById('flood-params');
+            const heatParams = document.getElementById('heat-params');
+            const earthquakeParams = document.getElementById('earthquake-params');
+            
+            // Hide all parameter sections
+            floodParams.classList.add('hidden');
+            heatParams.classList.add('hidden');
+            earthquakeParams.classList.add('hidden');
+            
+            // Show the selected parameter section
+            if (disasterType === 'flood') {
+                floodParams.classList.remove('hidden');
+            } else if (disasterType === 'heatwave') {
+                heatParams.classList.remove('hidden');
+            } else if (disasterType === 'earthquake') {
+                earthquakeParams.classList.remove('hidden');
+            }
+        }
+        
+        // Initial call to set the correct parameters on page load
+        toggleParams();
+        
+        // Add event listener to disaster type dropdown
+        document.getElementById('disaster-type').addEventListener('change', toggleParams);
+        
+        // Add some interactivity to input fields
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+                this.parentElement.style.transition = 'transform 0.2s ease';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+        
+        // Validate earthquake parameters
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const disasterType = document.getElementById('disaster-type').value;
+            
+            if (disasterType === 'earthquake') {
+                const seismicActivity = parseFloat(document.querySelector('input[name="seismic_activity"]').value);
+                const groundDisplacement = parseFloat(document.querySelector('input[name="ground_displacement"]').value);
+                const faultDistance = parseFloat(document.querySelector('input[name="fault_distance"]').value);
+                
+                if (seismicActivity < 0 || seismicActivity > 10) {
+                    alert('Seismic activity must be between 0 and 10');
+                    e.preventDefault();
+                    return;
+                }
+                
+                if (groundDisplacement < 0) {
+                    alert('Ground displacement cannot be negative');
+                    e.preventDefault();
+                    return;
+                }
+                
+                if (faultDistance < 0) {
+                    alert('Fault distance cannot be negative');
+                    e.preventDefault();
+                    return;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
